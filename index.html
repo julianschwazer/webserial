@@ -16,7 +16,7 @@
         <!-- connect button -->
         <button id="permissionElement">Connect Serial Port</button>
 
-        <button onclick="toggleLED()">Toggle</button>
+        <button onclick="toggleLights()">Toggle Lights</button>
 
     </main>    
 
@@ -39,49 +39,50 @@
             baudRate: baud, // baud settings for the serial connection
             requestButton: "permissionElement", // link to the id of the button that needs to be clicked
             requestAccessOnPageLoad: false, // if true - it will change to a modal instead of a normal button with the some functionality
+            //logOutgoingSerialData: true, // log outgoing data in console
+            //logIncomingSerialData: true, // log incoming data in console
         })
 
+        async function connect() {
+            port = await navigator.serial.requestPort();
+        }
 
         /* listening to events from the arduino */
-        connection.on('value', function(data) {
+        connection.on("value", function(data) {
 
-            // output of received data
+            //output of received data
             //console.log('Received value from arduino is: ' + data)
 
             if(data == cdID) {
-                console.log('The Major Communication Design has an ID of ' + cdID)
+                console.log("The Major Communication Design has an ID of " + cdID)
             }
             else if(data == mdID) {
-                console.log('The Major Media Design has an ID of ' + mdID)
+                console.log("The Major Media Design has an ID of " + mdID)
             }
             else if(data == sdID) {
-                console.log('The Major Sound Design has an ID of ' + sdID)
+                console.log("The Major Sound Design has an ID of " + sdID)
             }
             else if(data == idID) {
-                console.log('The Major Interaction Design has an ID of ' + idID)
+                console.log("The Major Interaction Design has an ID of " + idID)
             }
 
-            
         });
-
-    
         
+        /* sending data to the arduino */
+        async function toggleLights() {
+            if(toggle == false) {
+                await connection.send("event", 1);
+                toggle = true;
 
+                console.log("Lights ON");
+            }
+            else {
+                await connection.send("event", 0);
+                toggle = false;
 
-        /* sending events */
-        connection.send('event-with-string', "Hello there, Arduino");
-
-        connection.send('event-with-number', 123);
-
-        connection.send('event-with-array', [42, "Nice string"]);
-
-        connection.send('event-with-object', { r: 255, g: 255, b: 255 });
-
-        
-        /* toggle */
-        function toggleLED() {
-            const byte = (toggle = !toggle) ? 0 : 1
-            connection.sendEvent('led', byte);
+                console.log("Lights OFF");
+            }
+            
         }
 
     </script>
