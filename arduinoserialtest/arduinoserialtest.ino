@@ -12,11 +12,11 @@ void setup() {
 
   Serial.begin(57600);
 
-  WebSerial.on("event", doSomething);
+  WebSerial.on("event", toggleLights);
 }
 
 
-void doSomething(JSONVar parameter) {
+void toggleLights(JSONVar parameter) {
   int value = (int)parameter;
   
   if(value == 1) {
