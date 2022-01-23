@@ -1,0 +1,118 @@
+<!doctype html>
+
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <title>Web Serial Demo</title>
+    <!--
+    <meta name="description" content="A simple HTML5 Template for new projects.">
+    <meta name="author" content="SitePoint">
+    -->
+
+    <!--
+    <meta property="og:title" content="A Basic HTML5 Template">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://www.sitepoint.com/a-basic-html5-template/">
+    <meta property="og:description" content="A simple HTML5 Template for new projects.">
+    <meta property="og:image" content="image.png">
+    -->
+
+    <!--
+    <link rel="icon" href="/favicon.ico">
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+    -->
+
+    <!-- Styles -->
+    <link rel="stylesheet" href="css/styles.css?v=1.0">
+
+    <!-- Simple Web Serial -->
+    <!--<script lang="text/javascript" src="https://unpkg.com/simple-web-serial@latest/dist/simple-serial.min.js"></script>-->
+
+    <!-- Javascript - Simple Serial -->
+    <script lang="text/javascript" src="js/simple-serial.min.js"></script>
+    
+</head>
+
+<body>
+    <main>
+        <!-- connect button -->
+        <button id="permissionElement">Connect Serial Port</button>
+
+        <button onclick="toggleCloud()">Toggle</button>
+
+        <!-- display value -->
+        <div id="log"></div>
+    </main>    
+
+
+    <!-- control--led-with-button.html -->
+    <!---->
+    <script type="text/javascript">
+        let port;
+        let toggle = false;
+        
+        /* baud settings */
+        var baud = 57600;
+        
+        /* connect button IN */
+        const connection = SimpleSerial.connect({
+            baudRate: baud,
+            requestButton: "permissionElement",
+            requestAccessOnPageLoad: false,
+        })
+        
+        /* toggle */
+        async function toggleCloud() {
+            const byte = (toggle = !toggle) ? 0 : 1
+            connection.sendEvent('led', byte);
+        }
+
+
+        /* listening to events */
+        connection.on('value', function(data) {
+            console.log('Received event "event-from-arduino" with parameter ' + data)
+        });
+
+
+        /* sending events */
+        connection.send('event-with-string', "Hello there, Arduino");
+
+        connection.send('event-with-number', 123);
+
+        connection.send('event-with-array', [42, "Nice string"]);
+
+        connection.send('event-with-object', { r: 255, g: 255, b: 255 });
+    
+        
+    </script>
+    
+
+    <!-- plain.html -->
+    <!--
+    <script type="text/javascript">
+        let port;
+        let toggle = false;
+
+        async function connect() {
+            console.log('connect called');
+            port = await navigator.serial.requestPort();
+            await port.open({
+                baudRate: 9600
+            })
+        }
+
+        async function toggleLED() {
+            const writer = port.writable.getWriter();
+            const byte = (toggle = !toggle) ? 0 : 1
+            const data = new Uint8Array([byte]); // 1
+            await writer.write(data);
+            writer.releaseLock();
+        }
+    </script>
+    -->
+
+    </body>
+</html>
