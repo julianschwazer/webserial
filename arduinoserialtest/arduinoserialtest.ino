@@ -1,4 +1,3 @@
-
 #include <SimpleWebSerial.h>
 SimpleWebSerial WebSerial;
 
@@ -16,8 +15,6 @@ void setup() {
 
 void loop() {
 
-  ReadSerial();
-
   unsigned long currentMillis = millis();
 
   if (currentMillis - previousMillis >= interval) {
@@ -26,18 +23,5 @@ void loop() {
     int modcount = counter % 4 + 1;
     WebSerial.send("value", modcount);
   }
-}
-
-
-
-void ReadSerial() {
-  if (Serial.available()) {
-    int inByte = Serial.read();
-    if (inByte == 0) {
-      digitalWrite(13, HIGH);
-    } else if (inByte == 1) {
-      digitalWrite(13, LOW);
-    }
-  }
-  delay(5);
+  
 }
