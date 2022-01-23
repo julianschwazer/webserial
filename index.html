@@ -1,90 +1,89 @@
 <!doctype html>
 
 <html lang="en">
-<head>
-    <!-- Basics -->
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Web Serial Demo</title>
+    <head>
+        <!-- Basics -->
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <title>Web Serial Demo</title>
 
-    <!-- Javascript - Simple Serial -->
-    <script lang="text/javascript" src="js/simple-serial.min.js"></script>
-</head>
+        <!-- Javascript - Simple Serial -->
+        <script lang="text/javascript" src="js/simple-serial.min.js"></script>
+    </head>
 
-<body>
-    <main>
-        <!-- connect button -->
-        <button id="permissionElement">Connect Serial Port</button>
+    <body>
+        <main>
+            <!-- connect button -->
+            <button id="permissionElement">Connect Serial Port</button>
 
-        <button onclick="toggleLights()">Toggle Lights</button>
+            <button onclick="toggleLights()">Toggle Lights</button>
 
-    </main>    
+        </main>    
 
-    <!-- Javascript – Simple Serial Functions -->
-    <script type="text/javascript">
+        <!-- Javascript – Simple Serial Functions -->
+        <script type="text/javascript">
 
-        /* variables */
-        let toggle = false;
-        var baud = 57600;
+            /* variables */
+            let toggle = false;
+            var baud = 57600;
 
-        /* CHANGE IDS HERE */
-        var cdID = 1; // Communication Design ID
-        var mdID = 2; // Media Design ID
-        var sdID = 3; // Sound Design ID
-        var idID = 4; // Interaction Design ID
-        var sensorRelease = 5; // Additional Value when you release the sensor
-        
-        /* connect button IN */
-        const connection = SimpleSerial.connect({
-            baudRate: baud, // baud settings for the serial connection
-            requestButton: "permissionElement", // link to the id of the button that needs to be clicked
-            requestAccessOnPageLoad: false, // if true - it will change to a modal instead of a normal button with the some functionality
-            //logOutgoingSerialData: true, // log outgoing data in console
-            //logIncomingSerialData: true, // log incoming data in console
-        })
+            /* CHANGE IDS HERE */
+            var cdID = 1; // Communication Design ID
+            var mdID = 2; // Media Design ID
+            var sdID = 3; // Sound Design ID
+            var idID = 4; // Interaction Design ID
+            var sensorRelease = 5; // Additional Value when you release the sensor
+            
+            /* connect button IN */
+            const connection = SimpleSerial.connect({
+                baudRate: baud, // baud settings for the serial connection
+                requestButton: "permissionElement", // link to the id of the button that needs to be clicked
+                requestAccessOnPageLoad: false, // if true - it will change to a modal instead of a normal button with the some functionality
+                //logOutgoingSerialData: true, // log outgoing data in console
+                //logIncomingSerialData: true, // log incoming data in console
+            })
 
-        async function connect() {
-            port = await navigator.serial.requestPort();
-        }
-
-        /* listening to events from the arduino */
-        connection.on("value", function(data) {
-
-            //output of received data
-            //console.log('Received value from arduino is: ' + data)
-
-            if(data == cdID) {
-                console.log("The Major Communication Design has an ID of " + cdID)
-            }
-            else if(data == mdID) {
-                console.log("The Major Media Design has an ID of " + mdID)
-            }
-            else if(data == sdID) {
-                console.log("The Major Sound Design has an ID of " + sdID)
-            }
-            else if(data == idID) {
-                console.log("The Major Interaction Design has an ID of " + idID)
+            async function connect() {
+                port = await navigator.serial.requestPort();
             }
 
-        });
-        
-        /* sending data to the arduino */
-        async function toggleLights() {
-            if(toggle == false) {
-                await connection.send("event", 1);
-                toggle = true;
+            /* listening to events from the arduino */
+            connection.on("value", function(data) {
 
-                console.log("Lights ON");
+                //output of received data
+                //console.log('Received value from arduino is: ' + data)
+
+                if(data == cdID) {
+                    console.log("The Major Communication Design has an ID of " + cdID)
+                }
+                else if(data == mdID) {
+                    console.log("The Major Media Design has an ID of " + mdID)
+                }
+                else if(data == sdID) {
+                    console.log("The Major Sound Design has an ID of " + sdID)
+                }
+                else if(data == idID) {
+                    console.log("The Major Interaction Design has an ID of " + idID)
+                }
+
+            });
+            
+            /* sending data to the arduino */
+            async function toggleLights() {
+                if(toggle == false) {
+                    await connection.send("event", 1);
+                    toggle = true;
+
+                    console.log("Lights ON");
+                }
+                else {
+                    await connection.send("event", 0);
+                    toggle = false;
+
+                    console.log("Lights OFF");
+                }
             }
-            else {
-                await connection.send("event", 0);
-                toggle = false;
 
-                console.log("Lights OFF");
-            }
-        }
-
-    </script>
-
+        </script>
     </body>
 </html>
