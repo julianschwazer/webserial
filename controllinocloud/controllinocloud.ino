@@ -159,8 +159,6 @@ void ReadButtons() {
 void toggleLights(JSONVar parameter) {
   int value = (int)parameter;
 
-  // Serial.println(value);
-
   if (value == 1) {
     idleState = true;
     rainState = false;
