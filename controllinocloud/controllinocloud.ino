@@ -104,7 +104,7 @@ void loop() {
 void CheckButtonOne() {
   if (buttonOneState != oldButtonOneState) {
 
-    WebSerial.send("value", 1);
+    WebSerial.send("value", 0);
     rainState = true;
     idleState = false;
     rainTimer = millis();
@@ -116,7 +116,7 @@ void CheckButtonOne() {
 void CheckButtonTwo() {
   if (buttonTwoState != oldButtonTwoState) {
 
-    WebSerial.send("value", 2);
+    WebSerial.send("value", 1);
     rainState = true;
     idleState = false;
     rainTimer = millis();
@@ -128,7 +128,7 @@ void CheckButtonTwo() {
 void CheckButtonThree() {
   if (buttonThreeState != oldButtonThreeState) {
 
-    WebSerial.send("value", 3);
+    WebSerial.send("value", 2);
     rainState = true;
     idleState = false;
     rainTimer = millis();
@@ -140,7 +140,7 @@ void CheckButtonThree() {
 void CheckButtonFour() {
   if (buttonFourState != oldButtonFourState) {
 
-    WebSerial.send("value", 4);
+    WebSerial.send("value", 3);
     rainState = true;
     idleState = false;
     rainTimer = millis();

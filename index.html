@@ -28,10 +28,10 @@
             var baud = 57600;
 
             /* CHANGE IDS HERE */
-            var cdID = 1; // Communication Design ID
-            var mdID = 2; // Media Design ID
-            var sdID = 3; // Sound Design ID
-            var idID = 4; // Interaction Design ID
+            var cdID = 0; // Communication Design ID
+            var mdID = 1; // Media Design ID
+            var sdID = 2; // Sound Design ID
+            var idID = 3; // Interaction Design ID
             var sensorRelease = 5; // Additional Value when you release the sensor
             
             /* connect button IN */
@@ -54,16 +54,16 @@
                 //console.log('Received value from arduino is: ' + data)
 
                 if(data == cdID) {
-                    console.log("The Major Communication Design has an ID of " + cdID)
+                    console.log("Communication Design")
                 }
                 else if(data == mdID) {
-                    console.log("The Major Media Design has an ID of " + mdID)
+                    console.log("Media Design")
                 }
                 else if(data == sdID) {
-                    console.log("The Major Sound Design has an ID of " + sdID)
+                    console.log("Sound Design")
                 }
                 else if(data == idID) {
-                    console.log("The Major Interaction Design has an ID of " + idID)
+                    console.log("Interaction Design")
                 }
 
             });
